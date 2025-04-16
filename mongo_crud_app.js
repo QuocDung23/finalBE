@@ -21,13 +21,8 @@ app.use(express.json());
 // Create a new movie
 app.post('/movies', async (req, res) => {
   const { title, genre, rating } = req.body;
-  const movie = new Movie({
-    title,
-    genre,
-    rating
-  });
   try {
-    const result = await movieCollection.insertOne(movie);
+    const result = await movieCollection.insertOne({ title, genre, rating });
     res.status(201).send(result.ops[0]);
   } catch (err) {
     res.status(400).send('Error: ' + err.message);
