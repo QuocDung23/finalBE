@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://user:password@127.0.0.1:27019/S-Mongo?authSource=admin', {
+    mongoose.connect('mongodb://admin:admin123@localhost:27017/', {
       useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+      useUnifiedTopology: true,
+    })
     console.log('Connected to MongoDB');
   } catch (err) {
     console.error('Could not connect to MongoDB', err);

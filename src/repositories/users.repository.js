@@ -2,8 +2,12 @@ import UserModel from '../models/users.model.js';
 
 export class UserRepository {
   async create(dto) {
-    const { name, email, password } = dto;
+    const { name, email, password, role } = dto;
 
+    if (!name || !email || !password || !role) {
+      console.log(name,  email, password);
+      throw new Error('Name, email, and password are required.');
+    }
     const result = await UserModel.create({
       name,
       email,
@@ -13,13 +17,25 @@ export class UserRepository {
     return {
       name,
       email,
-      id: String(result._id),
+      id: String(result.id),
     };
+  }
+
+  async getUserByName(name) {
+    if(!name){
+      throw new Error('Vui lòng nhập tên')
+    }
+    
+    const findUser = await UserModel.findOne({ name }).lean()
+    if(!findUser){
+      console.log('Không tìm tháy người này');
+      return null
+    }
   }
 
   async getOneById(id) {
     const user = await UserModel.findOne({
-      _id: id,
+      id: id,
     });
 
     if (!user) {
@@ -27,7 +43,7 @@ export class UserRepository {
     }
 
     return {
-      id: String(user._id),
+      id: String(user.id),
       name: String(user.name),
       email: String(user.email),
     };
