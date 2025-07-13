@@ -58,7 +58,22 @@ class CourseController {
       });
     }
   }
-
+  async getCourseById(req, res){
+    try{
+        const { id } = req.body
+        const getCourseById = await CourseService.getCourseById(id)
+        return res.status(200).json({
+            success: true,
+            data: getCourseById
+        })
+    }catch(error){
+        console.log(error);
+        return res.status(400).json({
+          success: false,
+          message: error.message,
+        });
+    }
+  }
 }
 
 export default new CourseController();

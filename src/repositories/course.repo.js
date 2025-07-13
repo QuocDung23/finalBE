@@ -1,3 +1,4 @@
+import { get } from "mongoose";
 import courseModel from "../models/courses.model.js";
 import UserModel from "../models/users.model.js";
 
@@ -35,7 +36,33 @@ export class CourseRepo {
                 }
             }
         }catch(error) {
-            console.error(error.message)
+            console.error('Lỗi lấy course', error.message)
+        }
+    }
+
+    async getCourseById(id){
+        try{
+            const getById = await courseModel.findById(id)
+            return {
+                title: getById.title,
+                description: getById.description,
+                price: getById.price,
+                create: {
+                    id: getById.user.id,
+                    name: getById.user.name
+                }
+            }
+        }catch(error){
+            console.error('lỗi lấy course từ id', error.message)
+        }
+    }
+
+    async updateCourse(id, update) {
+        try {
+            const updateCourse = await courseModel.findOneAndUpdate({ id: id }, update, {new: true}).lean()
+            return updateCourse
+        }catch(error) {
+            console.error( 'lỗi update course',error.message)
         }
     }
 }
